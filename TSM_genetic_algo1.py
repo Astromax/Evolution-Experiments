@@ -20,9 +20,6 @@ AUTHOR
     Max Baugh  <mcbaugh@protonmail.com>
 
 
-SEE ALSO
-    ROOT <http://root.cern.ch>
-
 TO DO
     - One.
     - Two.
@@ -45,7 +42,6 @@ import random
 # globals
 #------------------------------------------------------------------------------
 timestamp = time.strftime('%Y-%m-%d-%Hh%M')
-GeV = 1000.
 
 #------------------------------------------------------------------------------
 # options
