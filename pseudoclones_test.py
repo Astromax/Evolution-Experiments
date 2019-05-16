@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 
-
 #------------------------------------------------------------------------------                                                                                    
 # imports                                                                                                                                                                 
 #------------------------------------------------------------------------------                                                                                               
-
 ## std                                                                                                                                                                               
 import argparse, sys, time
 import numpy as np
 import random
-
 
 #------------------------------------------------------------------------------
 # main
@@ -20,61 +17,52 @@ def main():
     print 'The first chain is: '
     print(chain)
 
-    new_chains = pseudoclones(chain)
-    print 'The new chains are: '
-    for c in range(len(new_chains)):
-        print(new_chains[c])
+    new_chain = pseudoclone(chain)
+    print 'The new chain is: '
+    print(new_chain)
     
     return
 #------------------------------------------------------------------------------
-def pseudoclones(chain):
-
+def pseudoclone(chain, cities):
+    distance = evaluate(chain, cities)
+    pseudoclone = chain
+    
     N = len(chain)
     new_chains = [[] for i in range(N)]
     for i in range(N-1):
         new_chains[i] = chain[:]
         new_chains[i][i+1], new_chains[i][i] = new_chains[i][i], new_chains[i][i+1]
 
-    return new_chains
+    for n in new_chains:
+        pcdistance = evaluate(n, cities)
+        if pcdistance < distance:
+            pseudoclone = n
+            distance = pcdistance
+        
+    return pseudoclone
+#------------------------------------------------------------------------------
+def evaluate(chain, cities):
+    distance = 0
+    print 'This is the current genome'
+    print(chain)
 
-#------------------------------------------------------------------------------                                                                                       
-def mutation(chain, mode, n):
+    for i in range(len(chain)-1):
+        gene = chain[i]
+        print 'This is the current gene'
+        print(gene)
+        print 'Current coordinates: (%f, %f)' % (cities[gene][1], cities[gene][2])
+        subdistance = 0
+        try:
+            xene = chain[i+1]
+            #print 'Destination coordinates: (%i, %i)' % (cities[xene][0], cities[xene][1])
+            subdistance = ( (cities[xene][1] - cities[gene][1])**2 + (cities[xene][2] - cities[gene][2])**2 )**0.5
+        except:
+            KeyError
+#        print 'The subdistance is %f' % subdistance
+        distance += subdistance
+#    print 'The total distance is %f' % distance
 
-    N = len(chain)
-
-    print 'The length of the chain is %i' % N
-
-    new_chains = [[] for i in range(n)]
-    if mode=='adjacent_swap':
-        for i in range(n):
-            r1 = random.randint(1, N-2)
-            new_chains[i] = chain[:]
-            new_chains[i][r1+1], new_chains[i][r1] = new_chains[i][r1], new_chains[i][r1+1]
-    elif mode=='random_swap':
-        for i in range(n):
-            r1 = random.randint(1, N-1)
-            r2 = random.randint(1, N-1)
-            new_chains[i] = chain[:]
-            new_chains[i][r2], new_chains[i][r1] = new_chains[i][r1], new_chains[i][r2]
-    elif mode=='self_cross':
-        for i in range(n):
-            xpoint = random.randint(1, N-1)
-            subchain = chain[:xpoint]
-            counterchain = chain[xpoint+1:]
-            new_chains[i] = counterchain + subchain
-    elif mode=='multi_random':
-        MR = N/10
-        print 'The mutation rate is %i' % MR
-        for i in range(n):
-            new_chains[i] = chain[:]
-            for j in range(MR):
-                r1 = random.randint(1, N-1)
-                r2 = random.randint(1, N-1)
-                new_chains[i][r2], new_chains[i][r1] = new_chains[i][r1], new_chains[i][r2]
-
-
-    return new_chains
-
+    return distance
 #------------------------------------------------------------------------------                                                                          
 if __name__ == '__main__': main()
 
