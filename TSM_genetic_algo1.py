@@ -19,10 +19,10 @@ OPTIONS
 AUTHOR
     Max Baugh  <mcbaugh@protonmail.com>
 
-
 TO DO
-    - One.
-    - Two.
+    - One: generalize the way the hyperparameters are used
+    - Two: control the number of offspring per pair/generation
+    - Three: apply "group selection" by measuring hyperparameter combo effectiveness
 
 2018-08-09
 """
@@ -56,6 +56,14 @@ def options():
 def main():
     ops = options()
 
+    #Hyperparameters
+    #pair_mode_probabilities = [0.4, 0.3, 0.3] #Must sum to 1.0
+    #mutation_mode_probabilities = [0.25, 0.25, 0.25, 0.25] #Must sum to 1.0
+    #mutation_rate = 0.1 #Defines how many swaps happen with multi-random mutation, as a fraction of number of cities
+    #initial_population = 1000
+    #population_limit = 10000 
+    #naive_stack = False #Boolean
+    
     pair_mode = 'egalitarian'
     pair_modes = ['egalitarian', 'random', 'ruthless']
     mutation_modes = ['adjacent_swap', 'random_swap', 'self_cross', 'multi_random']
@@ -115,6 +123,8 @@ def main():
         score_set = zip(scores, generation)
         ordered_score_set = sorted(score_set)
         parents = ordered_score_set[:selection_size]
+        #Put pseudoclone here
+        #Put twin-removal here
         distances = [g[0] for g in parents]
         genomes = [g[1] for g in parents]
         optimal_distance = distances[0]
@@ -143,7 +153,6 @@ def main():
     plt.xlabel('Generation')
     plt.ylabel('Optimal Distance')
     plt.show()
-
 
     return optimal_distance
 
