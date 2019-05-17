@@ -63,6 +63,9 @@ def main():
     #initial_population = 1000
     #population_limit = 10000 
     #naive_stack = False #Boolean
+    #pseudoclone = False #Decide whether or not applying pseudoclones
+    #pseudoclone_generation = 50 #Apply pseudoclones every N generations
+    #NoTwins = True #Decide whether or not to apply no-twins
     
     pair_mode = 'egalitarian'
     pair_modes = ['egalitarian', 'random', 'ruthless']
